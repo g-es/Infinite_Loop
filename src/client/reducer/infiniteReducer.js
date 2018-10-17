@@ -76,7 +76,7 @@ export default (state = initialState, action) => {
     case types.ON_SUSPECT: {
       const newState = Object.assign({}, state);
       console.log(action,'on suspect')
-      newState.suspect = action.payload;
+      newState.suspect = action.payload.target.value;
       return newState;
     }
     case types.ON_TRIED: {

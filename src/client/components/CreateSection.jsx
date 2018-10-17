@@ -14,12 +14,12 @@ const mapStateToProps = store => ({
 const mapDispatchToProps = (dispatch) => {
   return {
     
-    onProblem: (event) => {dispatch(actions.onProblem(event.target.value))},   
-    onExpect: (event) => {dispatch(actions.onExpect(event.target.value))},
-    onTried: (event) => {dispatch(actions.onTried(event.target.value))},
-    onSuspect: (event) => {dispatch(actions.onSuspect(event.target.value))},
-    onCreateSectionSubmit: (userid, problem, expect, tried, suspect,topic) => {dispatch(actions.onCreateSectionSubmit(userid, problem, expect, tried, suspect, topic))},
-    onTopic: (event) => {dispatch(actions.onTopic(event.target.value))},
+    onProblem: (event) => {dispatch(actions.onProblem(event))},   
+     onExpect: (event) => {dispatch(actions.onExpect(event))},
+     onTried: (event) => {dispatch(actions.onTried(event))},
+     onSuspect: (event) => {dispatch(actions.onSuspect(event))},
+     onCreateSectionSubmit: (event) => {dispatch(actions.onSuspect(event))},
+     onTopic: (event) => {dispatch(actions.onTopic(event))},
   };
 };
 
@@ -39,9 +39,9 @@ const CreateSection = (props) => {
         <label>What did I expect to happen: </label><input onChange = {props.onExpect} type="text" placeholder="" value={props.expect}/><br></br>
         <label>What have I tried: </label><input onChange = {props.onTried} type="text" placeholder="" value={props.tried}/><br></br>
         <label>Why I suspect its not working: </label><input onChange = {props.onSuspect} type="text" placeholder="" value={props.suspect}/><br></br>
+        
         <label>Topic: </label>
-
-        {/* replace this part */}
+         {/* replace this part */}
         <select defaultValue="" onChange={props.onTopic}>
           <option value="" disabled>Select topic</option>
           <option value='AJAX'>AJAX</option>
@@ -65,8 +65,7 @@ const CreateSection = (props) => {
           <option value='Servers'>Servers</option>
           <option value='Testing'>Testing</option>
         </select>
-
-        {/* <input onChange = {props.onTopic} type="text" placeholder="" value={props.topic}/> */}
+         {/* <input onChange = {props.onTopic} type="text" placeholder="" value={props.topic}/> */}
         <br></br>
         <div >
           <button type="submit" onClick={() => 
