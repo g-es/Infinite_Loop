@@ -9,7 +9,7 @@ const mapStateToProps = store => ({
   expect: store.infiniteReducer.expect,
   tried: store.infiniteReducer.tried,
   suspect: store.infiniteReducer.suspect,
-  topic: store.infiniteReducer.topic, 
+  topic: store.infiniteReducer.topic,
 });
 const mapDispatchToProps = (dispatch) => {
   return {

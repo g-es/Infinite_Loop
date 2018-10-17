@@ -9,6 +9,7 @@ const mapStateToProps = store => ({
   closed: store.infiniteReducer.closed,
   userid: store.infiniteReducer.user_id,
   role: store.infiniteReducer.role, 
+  rerender: store.infiniteReducer.rerender, 
 });
 const mapDispatchToProps = (dispatch) => {
   return {

@@ -15,6 +15,7 @@ const initialState = {
   tried: '',
   suspect: '',
   topic: '',
+  rerender: 0,
 };
 
 export default (state = initialState, action) => {
@@ -70,6 +71,7 @@ export default (state = initialState, action) => {
     }
     case types.ON_CREATESECTION_SUBMIT: {
       const newState = Object.assign({}, state);
+      newState.rerender += 1;
       return newState;
     }
     case types.ON_EXPECT: {
