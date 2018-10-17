@@ -1,16 +1,15 @@
 import React from 'react'
-// import { connect } from 'react-redux';
-// import * as actions from '../actions/actions.js';
-
+import { connect } from 'react-redux';
+import * as actions from '../actions/actions.js';
 
 const Post = (props) => {
   //user info
   const { name, role} = props;
   //post info
-  const { createdBy, resolvedBy, problem, expect, tried, suspect, topic, status, helperid, studentid, statusid, postid} = props;
+  const { createdBy, resolvedBy, problem, expect, tried, suspect, topic, status, userid, helperid, studentid, statusid, postid} = props;
   //eventHandlers
   const { changeStatus } = props;
-
+// console.log(props.status,props.user_id,props, 'in post.jsx')
   const style = {
     post: {
       margin: '5px',
@@ -30,6 +29,7 @@ const Post = (props) => {
       fontSize: '.7em'
     }
   }
+  // console.log(props.topic,'topic')
 
   return(
     <div style = {style.post}>
@@ -45,9 +45,12 @@ const Post = (props) => {
         <p style={style.pStyle}>{tried}</p>
       <h2 style={style.h2Style}>Suspect:</h2>
         <p style={style.pStyle}>{suspect}</p>
+
       <div className='footer'>
         <div>topic</div>
-        <button className='statusButton' onClick={() => {changeStatus(studentid, statusid, postid)}  }> {status} </button>
+        <button className='statusButton' onClick={() => {
+          console.log('from post', props.status, props.userid, props.postid)
+          return changeStatus(props.userid, props.status, props.postid) } }> {status} </button>
       </div>
     </div>
   )

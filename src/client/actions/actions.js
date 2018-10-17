@@ -187,23 +187,27 @@ export const onTopic = (event) => ({
 });
 
 export const changeStatus = (userid, postStatus, postid) => {
+  if(postStatus === 'unclaimed') postStatus = 1;
+  if(postStatus === 'claimed') postStatus = 2;
+  if(postStatus === 'closed') postStatus = 3;
+  console.log(userid,postStatus,postid, 'in actions')
+
   fetch('http://localhost:3000/status', {
       headers: {
-        'Content-Type': 'application/json'
+        'Content-Type': 'application/json',
       },
       method: 'PATCH',
       body: JSON.stringify({
+        user_id: userid,
         status: postStatus,
-        postid: postid,
-        userid: userid,
+        post_id: postid,
       })
     })
-    .then(res => res.json())
     .then((res) => {
+      console.log(res,'res')
         if (res.status === '200') fetchData(dispatch);
-      }
-
-    )
+      })
+    .catch(err => console.log(err,'errrr'))
 };
 
 

@@ -7,12 +7,12 @@ const mapStateToProps = store => ({
   notStarted: store.infiniteReducer.notStarted,
   inProgress: store.infiniteReducer.inProgress,
   closed: store.infiniteReducer.closed,
-  userid: store.infiniteReducer.userid,
+  userid: store.infiniteReducer.user_id,
   role: store.infiniteReducer.role, 
 });
 const mapDispatchToProps = (dispatch) => {
   return {
-    changeStatus: (event) => {dispatch(actions.changeStatus(event))},   
+    changeStatus: (userid, status, postid) => {actions.changeStatus(userid, status, postid)},   
   };
 };
 
@@ -55,9 +55,11 @@ const PostSection = (props) => {
 
   //iterate through each notStarted post and create component
   const notStartedComponents = props.notStarted.map((post, index) => {
+    console.log(post.post_id, post.status, props.userid,'post')
     return <Post
       key={index}
       // name={props.name}
+      userid={props.userid}
       role={props.role}
       createdBy={post.createdby}
       resolvedBy={post.resolvedby}
@@ -68,8 +70,8 @@ const PostSection = (props) => {
       topic={post.topic}
       status={post.status}
       changeStatus={props.changeStatus}
-      statusid = {post.statusid}
-      postid = {post.postid}
+      // statusid = {post.statusid}
+      postid = {post.post_id}
       />
   });
   //iterate through each notStarted post and create component
@@ -78,6 +80,7 @@ const PostSection = (props) => {
       key={index * 10000}
       // name={name}
       //role={role}
+      userid={props.userid}
       createdBy={post.createdby}
       resolvedBy={post.resolvedby}
       problem={post.problem}
@@ -88,7 +91,7 @@ const PostSection = (props) => {
       status={post.status}
       changeStatus={props.changeStatus}
       statusid = {post.statusid}
-      postid = {post.postid}
+      postid = {post.post_id}
       />
   });
   //iterate through each notStarted post and create component
@@ -97,6 +100,7 @@ const PostSection = (props) => {
       // key={index * 10000}
       // name={name}
       // role={role}
+      userid={props.userid}
       createdBy={post.createdby}
       resolvedBy={post.resolvedby}
       problem={post.problem}
@@ -105,9 +109,9 @@ const PostSection = (props) => {
       suspect={post.suspect}
       topic={post.topic}
       status={post.status}
-      changeStatus={changeStatus}
+      changeStatus={props.changeStatus}
       statusid = {post.statusid}
-      postid = {post.postid}
+      postid = {post.post_id}
       />
   });
 
