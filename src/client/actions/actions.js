@@ -5,7 +5,7 @@ export const createUsername = (event) => ({
   payload: event,
 });
 
-export const createRole= (event) => ({
+export const createRole = (event) => ({
   type: types.CREATE_ROLE,
   payload: event,
 });
@@ -39,35 +39,41 @@ export const updateClosed = (arr) => ({
 
 // a function to get listing, which will be used several times
 export const fetchData = (dispatch) => {
-      const notStarted = [];
-      const inProgress = [];
-      const closed = [];
-      fetch('http://localhost:3000/home', {
-        method: 'GET',
-        headers: {'Content-Type': 'application/json'},
+  const notStarted = [];
+  const inProgress = [];
+  const closed = [];
+  fetch('http://localhost:3000/home', {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+    })
+    .then(posts => posts.json())
+    .then(posts => {
+      posts.forEach((post) => {
+        if (post.status === 'unclaimed') {
+          notStarted.push(post);
+        }
+        if (post.status === 'claimed') {
+          inProgress.push(post)
+        }
+        if (post.status === 'closed') {
+          closed.push(post);
+        }
       })
-      .then(posts => posts.json())
-      .then(posts => {
-        console.log(posts);
-        posts.forEach((post) => {
-          console.log(post,'post');
-          if (post.status === 'unclaimed') {
-            notStarted.push(post);
-          }
-          if (post.status === 'claimed') {
-            inProgress.push(post)
-          }
-          if (post.status === 'closed') {
-            closed.push(post);
-          }
-        })
-        dispatch(updateUnclaimed(notStarted));
-        dispatch(updateClaimed(inProgress));
-        dispatch(updateClosed(closed));
-      })
+      dispatch(updateUnclaimed(notStarted));
+      dispatch(updateClaimed(inProgress));
+      dispatch(updateClosed(closed));
+    })
 }
 
-export const onSignupSubmit = ({ username, password, role, firstname, lastname }) => {
+export const onSignupSubmit = ({
+  username,
+  password,
+  role,
+  firstname,
+  lastname
+}) => {
   // type: types.ON_SIGNUP_SUBMIT,
   // payload: {user, pass, role},
   //requires thunk TODO:
@@ -78,30 +84,31 @@ export const onSignupSubmit = ({ username, password, role, firstname, lastname }
   }
   return function (dispatch) {
     return fetch('http://localhost:3000/createuser', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json'},
-      body: JSON.stringify({
-        username,
-        password,
-        role,
-        firstname,
-        lastname,
-      }),
-    })
-    .then((res) => {
-      // wfrtyui
-      if(res.status === 200) {
-        dispatch(signUpSuccess());
-        fetchData(dispatch);
-      }
-      else dispatch(signUpFail())
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          username,
+          password,
+          role,
+          firstname,
+          lastname,
+        }),
       })
-      // when should i make this get request?
+      .then((res) => {
+        // wfrtyui
+        if (res.status === 200) {
+          dispatch(signUpSuccess());
+          fetchData(dispatch);
+        } else dispatch(signUpFail())
+      })
+    // when should i make this get request?
     // .then(() => {
     //   // dispatch(fetchData) // fetchData(dispatch)
     //   fetchData(dispatch);
     // })
-}
+  }
 };
 export const saveLoginInfo = (data) => ({
   type: types.SAVE_LOGIN_INFO,
@@ -115,30 +122,28 @@ export const onLoginSubmit = (user, pass) => {
 
   return function (dispatch) {
     return fetch('http://localhost:3000/login', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json'},
-      body: JSON.stringify({
-        username:user,
-        password:pass,
-      }),
-    })
-    
-    .then(res =>{
-      console.log(res.status)
-      if(res.status === 200) {
-        console.log('success');
-        dispatch(loginSuccess());
-        fetchData(dispatch);
-      }
-      else dispatch(loginFail())
-      return res;
-    })
-    .then((res) => {
-      return res.json()
-      dispatch(saveLoginInfo(res[0]))
-      console.log(res,'res in onLoginSubmit')
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          username: user,
+          password: pass,
+        }),
       })
-};
+
+      .then(res => {
+        if (res.status === 200) {
+          dispatch(loginSuccess());
+          fetchData(dispatch);
+        } else dispatch(loginFail())
+        return res;
+      })
+      .then((res) => {
+        return res.json()
+        dispatch(saveLoginInfo(res[0]))
+      })
+  };
 };
 
 export const signUpSuccess = () => ({
@@ -183,22 +188,22 @@ export const onTopic = (event) => ({
 
 export const changeStatus = (userid, postStatus, postid) => {
   fetch('http://localhost:3000/status', {
-    headers: {'Content-Type': 'application/json'},
-    method:'PATCH',
-    body: JSON.stringify({
-      status: postStatus,
-      postid: postid,
-      userid: userid,
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      method: 'PATCH',
+      body: JSON.stringify({
+        status: postStatus,
+        postid: postid,
+        userid: userid,
+      })
     })
-  })
-  .then(res => res.json())
-  .then((res)=>{
-    if(res.status === '200') fetchData(dispatch);
-    else console.log('fail in actions changeStatus')
-  }
-    
-  )
-  // payload: TODO: thunk
+    .then(res => res.json())
+    .then((res) => {
+        if (res.status === '200') fetchData(dispatch);
+      }
+
+    )
 };
 
 
@@ -206,24 +211,26 @@ export const togglePage = () => ({
   type: types.TOGGLE_PAGE,
 });
 
-export const onCreateSectionSubmit = (userid, problem, expect, tried, suspect, topic) => {
-  // type: types.ON_CREATESECTION_SUBMIT,
-  //payload: TODO: thunk
-  return fetch('http://localhost:3000/createpost', {
-    headers: {'Content-Type': 'application/json'},
-    method:'PATCH',
-    body: JSON.stringify({
-      // status: postStatus,
-      // postid: postid,
-      // all these 6 fields enough??
-      userid: userid,
-      problem: problem,
-      expect: expect,
-      trid: tried,
-      suspect:suspect,
-      topic: topic,
-      // createdby, resolvedby, problem, expect, tried, suspect, topic
-    })
-  })
-  .then(dispatch(fetchData()))
+export const onCreateSectionSubmit = (user_id, problem, expect, tried, suspect, topic) => {
+  return function (dispatch) {
+    return fetch('http://localhost:3000/createpost', {
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        method: 'POST',
+        body: JSON.stringify({
+          // status: postStatus,
+          // postid: postid,
+          // all these 6 fields enough??
+          user_id: user_id,
+          problem: problem,
+          expect: expect,
+          tried: tried,
+          suspect: suspect,
+          topic: topic,
+          // createdby, resolvedby, problem, expect, tried, suspect, topic
+        })
+      })
+      .then(fetchData(dispatch));
+  }
 }

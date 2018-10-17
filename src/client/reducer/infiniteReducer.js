@@ -76,7 +76,7 @@ export default (state = initialState, action) => {
     case types.ON_SUSPECT: {
       const newState = Object.assign({}, state);
       console.log(action,'on suspect')
-      newState.suspect = action.payload.target.value;
+      newState.suspect = action.payload;
       return newState;
     }
     case types.ON_TRIED: {
@@ -89,11 +89,6 @@ export default (state = initialState, action) => {
       console.log(action.payload.target.value,'in reducer')
       newState.topic = action.payload.currentTarget.value;
       return newState;
-    }
-    case types.ON_CREATESECTION_SUBMIT: {
-      const newState = Object.assign({}, state);
-      // fetch request, send all the problem/suspect/tried/topic to database
-      
     }
     case types.CHANGE_STATUS: {
       const newState = Object.assign({}, state);

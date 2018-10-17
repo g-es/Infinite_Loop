@@ -55,8 +55,6 @@ const PostSection = (props) => {
 
   //iterate through each notStarted post and create component
   const notStartedComponents = props.notStarted.map((post, index) => {
-    console.log('props.notStarted');
-    console.log(props.notStarted);
     return <Post
       key={index}
       // name={props.name}
@@ -75,8 +73,6 @@ const PostSection = (props) => {
       />
   });
   //iterate through each notStarted post and create component
-  console.log('props.inProgress');
-  console.log(props.inProgress);
   const inProgressComponents = props.inProgress.map((post, index) => {
     return <Post
       key={index * 10000}

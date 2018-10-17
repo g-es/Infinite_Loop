@@ -51,7 +51,6 @@ class App extends Component {
   // onSignupChangedHandler(event) {
   //   const newState = Object.assign({}, this.state);
   //   newState.role = event.currentTarget.value;
-  //   console.log(newState.role);
   //   this.setState(newState);
   // }
 
