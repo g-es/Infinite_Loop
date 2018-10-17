@@ -15,11 +15,11 @@ const mapDispatchToProps = (dispatch) => {
   return {
     
     onProblem: (event) => {dispatch(actions.onProblem(event))},   
-     onExpect: (event) => {dispatch(actions.onExpect(event))},
-     onTried: (event) => {dispatch(actions.onTried(event))},
-     onSuspect: (event) => {dispatch(actions.onSuspect(event))},
-     onCreateSectionSubmit: (event) => {dispatch(actions.onSuspect(event))},
-     onTopic: (event) => {dispatch(actions.onTopic(event))},
+    onExpect: (event) => {dispatch(actions.onExpect(event))},
+    onTried: (event) => {dispatch(actions.onTried(event))},
+    onSuspect: (event) => {dispatch(actions.onSuspect(event))},
+    onCreateSectionSubmit: (userid, problem, expect, tried, suspect,topic) => {dispatch(actions.onCreateSectionSubmit(userid, problem, expect, tried, suspect, topic))},
+    onTopic: (event) => {dispatch(actions.onTopic(event))},
   };
 };
 

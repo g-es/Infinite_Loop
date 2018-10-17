@@ -54,9 +54,11 @@ module.exports = {
         db.one("UPDATE posts SET status=$1, helper_id=$2 WHERE post_id=$3 RETURNING *", [req.body.status + 1, req.body.user_id, req.body.post_id])
           .then(data => {
             res.locals.data = data;
+            console.log('reach data', data)
             next();
           })
           .catch(err => {
+            // console.log(err,'reach here')
             next(err);
           })
       } else {
