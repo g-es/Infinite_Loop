@@ -68,6 +68,10 @@ export default (state = initialState, action) => {
       newState.problem = action.payload.target.value;
       return newState;
     }
+    case types.ON_CREATESECTION_SUBMIT: {
+      const newState = Object.assign({}, state);
+      return newState;
+    }
     case types.ON_EXPECT: {
       const newState = Object.assign({}, state);
       newState.expect = action.payload.target.value;
@@ -76,7 +80,7 @@ export default (state = initialState, action) => {
     case types.ON_SUSPECT: {
       const newState = Object.assign({}, state);
       console.log(action,'on suspect')
-      newState.suspect = action.payload;
+      newState.suspect = action.payload.target.value;
       return newState;
     }
     case types.ON_TRIED: {

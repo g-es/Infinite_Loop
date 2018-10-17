@@ -231,6 +231,7 @@ export const onCreateSectionSubmit = (user_id, problem, expect, tried, suspect, 
           // createdby, resolvedby, problem, expect, tried, suspect, topic
         })
       })
-      .then(fetchData(dispatch));
+      .then(fetchData(dispatch))
+      .then(dispatch({type: types.ON_CREATESECTION_SUBMIT}))
   }
 }
