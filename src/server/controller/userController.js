@@ -9,7 +9,6 @@ module.exports = {
    */
   createUser(req, res, next) {
     //check request has correct body format
-    console.log(req.body,'createUser')
     if(Object.keys(req.body).length === 5 && req.body.username && req.body.password && req.body.role) {
       //if role equals to user, create user 
         db.one("INSERT INTO users(username, password, role, firstname, lastname) VALUES ($1, $2, $3, $4, $5) RETURNING *", [req.body.username, req.body.password, req.body.role, req.body.firstname, req.body.lastname])
@@ -19,7 +18,7 @@ module.exports = {
         })
         .catch(err => {
           console.log('ERROR: ', err)
-          return next(err);
+          return res.status(404).send({ err: err });
         });
        
     } else {

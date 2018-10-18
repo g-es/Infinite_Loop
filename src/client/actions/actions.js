@@ -43,13 +43,14 @@ export const fetchData = (dispatch) => {
   const inProgress = [];
   const closed = [];
   fetch('http://localhost:3000/home', {
-      method: 'GET',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-    })
+    method: 'GET',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+  })
     .then(posts => posts.json())
     .then(posts => {
+      
       posts.forEach((post) => {
         if (post.status === 'unclaimed') {
           notStarted.push(post);
@@ -84,20 +85,21 @@ export const onSignupSubmit = ({
   }
   return function (dispatch) {
     return fetch('http://localhost:3000/createuser', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({
-          username,
-          password,
-          role,
-          firstname,
-          lastname,
-        }),
-      })
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        username,
+        password,
+        role,
+        firstname,
+        lastname,
+      }),
+    })
       .then((res) => {
         // wfrtyui
+        // console.log(res.json());
         if (res.status === 200) {
           dispatch(signUpSuccess());
           fetchData(dispatch);
@@ -122,15 +124,15 @@ export const onLoginSubmit = (user, pass) => {
 
   return function (dispatch) {
     return fetch('http://localhost:3000/login', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({
-          username: user,
-          password: pass,
-        }),
-      })
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        username: user,
+        password: pass,
+      }),
+    })
 
       .then(res => {
         if (res.status === 200) {
@@ -141,6 +143,9 @@ export const onLoginSubmit = (user, pass) => {
       })
       .then((res) => {
         return res.json()
+      })
+      .then(res => {
+        // console.log(res[0])
         dispatch(saveLoginInfo(res[0]))
       })
   };
@@ -186,28 +191,33 @@ export const onTopic = (event) => ({
   payload: event,
 });
 
-export const changeStatus = (userid, postStatus, postid) => {
-  if(postStatus === 'unclaimed') postStatus = 1;
-  if(postStatus === 'claimed') postStatus = 2;
-  if(postStatus === 'closed') postStatus = 3;
-  console.log(userid,postStatus,postid, 'in actions')
-
-  fetch('http://localhost:3000/status', {
+export const changeStatus = (userid, postStatus, postid, role) => {
+  if (postStatus === 'unclaimed') postStatus = 1;
+  if (postStatus === 'claimed') postStatus = 2;
+  if (postStatus === 'closed') postStatus = 3;
+   return (dispatch) => {
+    console.log('this is not going to work');
+    return fetch('http://localhost:3000/status', {
       headers: {
         'Content-Type': 'application/json',
+        //       "Access-Control-Allow-Origin": "*",
+        // "Access-Control-Allow-Methods ": "GET, POST, HEAD, PATCH, DELETE",
+        // "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept",
       },
-      method: 'PATCH',
+      method: 'POST',
       body: JSON.stringify({
         user_id: userid,
         status: postStatus,
         post_id: postid,
+        role: role,
       })
     })
-    .then((res) => {
-      console.log(res,'res')
-        if (res.status === '200') fetchData(dispatch);
+      .then((res) => {
+        console.log(res.status, 'res')
+        fetchData(dispatch);
       })
-    .catch(err => console.log(err,'errrr'))
+      .catch(err => console.log(err, 'errrr'));
+  }
 };
 
 
@@ -218,24 +228,24 @@ export const togglePage = () => ({
 export const onCreateSectionSubmit = (user_id, problem, expect, tried, suspect, topic) => {
   return function (dispatch) {
     return fetch('http://localhost:3000/createpost', {
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        method: 'POST',
-        body: JSON.stringify({
-          // status: postStatus,
-          // postid: postid,
-          // all these 6 fields enough??
-          user_id: user_id,
-          problem: problem,
-          expect: expect,
-          tried: tried,
-          suspect: suspect,
-          topic: topic,
-          // createdby, resolvedby, problem, expect, tried, suspect, topic
-        })
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      method: 'POST',
+      body: JSON.stringify({
+        // status: postStatus,
+        // postid: postid,
+        // all these 6 fields enough??
+        user_id: user_id,
+        problem: problem,
+        expect: expect,
+        tried: tried,
+        suspect: suspect,
+        topic: topic,
+        // createdby, resolvedby, problem, expect, tried, suspect, topic
       })
+    })
       .then(fetchData(dispatch))
-      .then(dispatch({type: types.ON_CREATESECTION_SUBMIT}))
+      .then(dispatch({ type: types.ON_CREATESECTION_SUBMIT }))
   }
 }

@@ -10,7 +10,7 @@ module.exports = {
    * @param {function} next sends req and res to next middleware
    */
   getPosts(req, res, next) {
-    db.any('SELECT p.post_id, p.student_id, p.helper_id, s.firstname AS student_name, h.firstname AS helper_name, p.problem, p.expect, p.suspect, p.tried, p.status, sta.status FROM ((posts AS p INNER JOIN users AS s ON p.student_id = s.user_id) LEFT JOIN users as h ON p.helper_id = h.user_id) LEFT JOIN status as sta ON p.status = sta.status_id')
+    db.any('SELECT p.post_id, p.student_id, p.helper_id, s.firstname AS student_name, h.firstname AS helper_name, p.problem, p.expect, p.suspect, p.tried, p.status, sta.status, p.topic FROM ((posts AS p INNER JOIN users AS s ON p.student_id = s.user_id) LEFT JOIN users as h ON p.helper_id = h.user_id) LEFT JOIN status as sta ON p.status = sta.status_id')
       .then(data => {
         res.locals.data = data;
         return next();
@@ -38,7 +38,7 @@ module.exports = {
           next(err);
         })
     } else {
-      res.status(400).send('Invalid post');
+      res.send('Invalid post');
     }
   },
   /**
@@ -49,6 +49,10 @@ module.exports = {
    * @param {function} next sends req and res to next middleware
    */
   changeStatus(req, res, next) {
+    console.log('made it inside changeStatus');
+    console.log(req.body);
+    console.log(Object.keys(req.body).length)
+    console.log(req.body.status, req.body.user_id, req.body.post_id, req.body.role)
     if (Object.keys(req.body).length === 4) {
       if (req.body.role === 2) {
         db.one("UPDATE posts SET status=$1, helper_id=$2 WHERE post_id=$3 RETURNING *", [req.body.status + 1, req.body.user_id, req.body.post_id])
