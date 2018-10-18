@@ -30,17 +30,32 @@ const CreateSection = (props) => {
       width: "500px",
       height: "200px",
       textAlign: "left",
-      display: 'block'
+      display: 'block',
+      'margin-left': '30%',
+      'box-shadow': '5px 5px 5px #888888',
+      'font-family': 'arial',
+      
+    }
+    const h2style={
+      'margin-left': '20px',
+      'margin-bottom': '10px',
+    }
+    const labelStyle={
+      'margin-left': '20px',
+    }
+    const buttonStyle={
+      'margin-left': '20px',
+      'margin-top': '10px'
     }
     return (
       <div style = {divStyle}>
-        <h2>Please enter the problem: </h2>
-        <label>Problem: </label><input onChange = {props.onProblem} type="text" placeholder="" value={props.problem}/><br></br>
-        <label>What did I expect to happen: </label><input onChange = {props.onExpect} type="text" placeholder="" value={props.expect}/><br></br>
-        <label>What have I tried: </label><input onChange = {props.onTried} type="text" placeholder="" value={props.tried}/><br></br>
-        <label>Why I suspect its not working: </label><input onChange = {props.onSuspect} type="text" placeholder="" value={props.suspect}/><br></br>
+        <h2 style={h2style}>Please enter the problem: </h2>
+        <label style={labelStyle}>Problem: </label><input onChange = {props.onProblem} type="text" placeholder="" value={props.problem}/><br></br>
+        <label style={labelStyle}>What did I expect to happen: </label><input onChange = {props.onExpect} type="text" placeholder="" value={props.expect}/><br></br>
+        <label style={labelStyle}>What have I tried: </label><input onChange = {props.onTried} type="text" placeholder="" value={props.tried}/><br></br>
+        <label style={labelStyle}>Why I suspect its not working: </label><input onChange = {props.onSuspect} type="text" placeholder="" value={props.suspect}/><br></br>
         
-        <label>Topic: </label>
+        <label style={labelStyle}>Topic: </label>
          {/* replace this part */}
         <select defaultValue="" onChange={props.onTopic}>
           <option value="" disabled>Select topic</option>
@@ -68,7 +83,7 @@ const CreateSection = (props) => {
          {/* <input onChange = {props.onTopic} type="text" placeholder="" value={props.topic}/> */}
         <br></br>
         <div >
-          <button type="submit" onClick={() => 
+          <button style={buttonStyle} type="submit" onClick={() => 
             props.onCreateSectionSubmit(props.user_id,props.problem,props.expect,props.tried,props.suspect,props.topic)
             }>Submit</button>
         </div>

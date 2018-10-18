@@ -44,20 +44,29 @@ const LoginPage = (props) => {
   const divStyle = {
     border: "1px solid black",
     width: "300px",
-    height: "200px",
-    textAlign: "center"
+    height: "270px",
+    textAlign: "center",
+    position:'fixed',
+    left:'30%',
+    top:'20%',
+    'box-shadow': '5px 5px 5px #888888',
+    'font-family': 'arial',
   }
   const dStyle = {
     marginBottom: '5px',
     marginTop: '5px'
   }
+  // const label = {
+  //   marginBottom: '5px',
+  //   marginTop: '5px'
+  // }
   return (
     <div style = {divStyle}>
       <h2>Please enter your name: </h2>
       {/* <label>Name: </label><input onChange = {props.onSignupNameChangedHandler} type="text" placeholder="Your name"/> */}
-      <label>UserName: </label><input onChange = {props.createUsername} type="text" placeholder="Username" value={props.username}/>
+      <label>UserName: </label><input onChange = {props.createUsername} type="text" placeholder="Username" value={props.username}/><br />
 
-      <label>Password: </label><input onChange = {props.createPassword} type="text" placeholder="Password" value={props.password}/>
+      <label>Password: </label><input onChange = {props.createPassword} type="text" placeholder='Password' value={props.password}/>
       <div style={dStyle}>
         <label>Choose your role: </label><select defaultValue="" onChange={props.createRole}>
           <option value="" disabled>Select your role</option>
@@ -68,7 +77,7 @@ const LoginPage = (props) => {
 
       
 
-      <label>FirstName: </label><input onChange = {props.createFirstname} type="text" placeholder="firstname" value={props.firstname}/>
+      <label>FirstName: </label><input onChange = {props.createFirstname} type="text" placeholder="firstname" value={props.firstname}/><br />
       <label>LastName: </label><input onChange = {props.createLastname} type="text" placeholder="lastname" value={props.lastname}/>
       
       <div style={dStyle}>

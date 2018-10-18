@@ -139,7 +139,7 @@ export default (state = initialState, action) => {
     }
     case types.SAVE_LOGIN_INFO:{
       const newState = Object.assign({}, state);
-      console.log(action.payload, 'payload')
+      // console.log(action.payload, 'payload')
       newState.firstname = action.payload.firstname;
       newState.lastname = action.payload.lastname;
       newState.user_id = action.payload.user_id;
