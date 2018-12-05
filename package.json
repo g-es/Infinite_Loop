@@ -8,7 +8,18 @@
     "start": "parcel index.html",
     "server": "nodemon src/server/server.js"
   },
-  "author": "Lee, Pablo, Oscar",
+  "babel": {
+    "presets": [
+      "env",
+      "react",
+      "stage-2",
+      "es2015"
+    ],
+    "plugins": [
+      "transform-decorators-legacy"
+    ]
+  },
+  "author": "Lee, Pablo, Oscar, Ge",
   "license": "ISC",
   "dependencies": {
     "body-parser": "^1.18.3",
@@ -27,7 +38,12 @@
   },
   "devDependencies": {
     "babel-cli": "^6.26.0",
+    "babel-core": "^6.26.3",
+    "babel-plugin-transform-decorators-legacy": "^1.3.5",
     "babel-preset-env": "^1.7.0",
+    "babel-preset-es2015": "^6.24.1",
+    "babel-preset-react": "^6.24.1",
+    "babel-preset-stage-2": "^6.24.1",
     "jest": "^23.6.0",
     "nodemon": "^1.18.4",
     "parcel": "^1.10.3",
