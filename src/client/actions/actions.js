@@ -1,37 +1,37 @@
-import * as types from '../actions/actionTypes';
+import * as types from './actionTypes';
 
-export const createUsername = (event) => ({
+export const createUsername = event => ({
   type: types.CREATE_USERNAME,
   payload: event,
 });
 
-export const createRole = (event) => ({
+export const createRole = event => ({
   type: types.CREATE_ROLE,
   payload: event,
 });
 
-export const createPassword = (event) => ({
+export const createPassword = event => ({
   type: types.CREATE_PASSWORD,
   payload: event,
 });
-export const createFirstname = (event) => ({
+export const createFirstname = event => ({
   type: types.CREATE_FIRSTNAME,
   payload: event,
 });
-export const createLastname = (event) => ({
+export const createLastname = event => ({
   type: types.CREATE_LASTNAME,
   payload: event,
 });
 
-export const updateUnclaimed = (arr) => ({
+export const updateUnclaimed = arr => ({
   type: types.UPDATE_UNCLAIMED,
   payload: arr,
 });
-export const updateClaimed = (arr) => ({
+export const updateClaimed = arr => ({
   type: types.UPDATE_CLAIMED,
   payload: arr,
 });
-export const updateClosed = (arr) => ({
+export const updateClosed = arr => ({
   type: types.UPDATE_CLOSED,
   payload: arr,
 });
@@ -45,39 +45,41 @@ export const fetchData = (dispatch) => {
   fetch('http://localhost:3000/home', {
     method: 'GET',
     headers: {
-      'Content-Type': 'application/json'
+      'Content-Type': 'application/json',
     },
   })
-    .then(posts => posts.json())
-    .then(posts => {
-      
+    .then((posts) => {
+      return posts.json();
+    })
+    .then((posts) => {
       posts.forEach((post) => {
         if (post.status === 'unclaimed') {
           notStarted.push(post);
         }
         if (post.status === 'claimed') {
-          inProgress.push(post)
+          inProgress.push(post);
         }
         if (post.status === 'closed') {
           closed.push(post);
         }
-      })
+      });
       dispatch(updateUnclaimed(notStarted));
       dispatch(updateClaimed(inProgress));
       dispatch(updateClosed(closed));
     })
-}
+    .catch(error => console.log(error, 'err in fetchDT'));
+};
 
 export const onSignupSubmit = ({
   username,
   password,
   role,
   firstname,
-  lastname
+  lastname,
 }) => {
   // type: types.ON_SIGNUP_SUBMIT,
   // payload: {user, pass, role},
-  //requires thunk TODO:
+  // requires thunk TODO:
   if (role === 'helper') {
     role = 2;
   } else {
@@ -87,7 +89,7 @@ export const onSignupSubmit = ({
     return fetch('http://localhost:3000/createuser', {
       method: 'POST',
       headers: {
-        'Content-Type': 'application/json'
+        'Content-Type': 'application/json',
       },
       body: JSON.stringify({
         username,
@@ -97,62 +99,50 @@ export const onSignupSubmit = ({
         lastname,
       }),
     })
+      .then(res => res.json())
       .then((res) => {
-        // wfrtyui
-        // console.log(res.json());
-        if (res.status === 200) {
-          dispatch(signUpSuccess());
+        console.log(res, 'signup return data');
+        // if (res.status === 200) {
+          dispatch(signUpSuccess(res.user_id));
           fetchData(dispatch);
-        } else dispatch(signUpFail())
-      })
-    // when should i make this get request?
-    // .then(() => {
-    //   // dispatch(fetchData) // fetchData(dispatch)
-    //   fetchData(dispatch);
-    // })
-  }
-};
-export const saveLoginInfo = (data) => ({
-  type: types.SAVE_LOGIN_INFO,
-  payload: data,
-})
-// export const createUsername = (event) => ({
-//   type: types.CREATE_USERNAME,
-//   payload: event,
-// });
-export const onLoginSubmit = (user, pass) => {
-
-  return function (dispatch) {
-    return fetch('http://localhost:3000/login', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({
-        username: user,
-        password: pass,
-      }),
-    })
-
-      .then(res => {
-        if (res.status === 200) {
-          dispatch(loginSuccess());
-          fetchData(dispatch);
-        } else dispatch(loginFail())
-        return res;
-      })
-      .then((res) => {
-        return res.json()
-      })
-      .then(res => {
-        // console.log(res[0])
-        dispatch(saveLoginInfo(res[0]))
-      })
+        // } 
+        // else dispatch(signUpFail());
+      });
   };
 };
+export const saveLoginInfo = data => ({
+  type: types.SAVE_LOGIN_INFO,
+  payload: data,
+});
 
-export const signUpSuccess = () => ({
+export const onLoginSubmit = (user, pass) => function LoginSubmit(dispatch) {
+  return fetch('http://localhost:3000/login', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({
+      username: user,
+      password: pass,
+    }),
+  })
+
+    .then((res) => {
+      if (res.status === 200) {
+        dispatch(loginSuccess());
+        fetchData(dispatch);
+      } else dispatch(loginFail());
+      return res;
+    })
+    .then(res => res.json())
+    .then((res) => {
+      dispatch(saveLoginInfo(res[0]));
+    });
+};
+
+export const signUpSuccess = (id) => ({
   type: types.ON_SIGNUP_SUCCESS,
+  payload: id,
 });
 
 export const signUpFail = () => ({
@@ -167,26 +157,26 @@ export const loginFail = () => ({
 });
 
 
-export const onProblem = (event) => ({
+export const onProblem = event => ({
   type: types.ON_PROBLEM,
   payload: event,
 });
 
-export const onExpect = (event) => ({
+export const onExpect = event => ({
   type: types.ON_EXPECT,
   payload: event,
 });
 
-export const onTried = (event) => ({
+export const onTried = event => ({
   type: types.ON_TRIED,
   payload: event,
 });
 
-export const onSuspect = (event) => ({
+export const onSuspect = event => ({
   type: types.ON_SUSPECT,
   payload: event,
 });
-export const onTopic = (event) => ({
+export const onTopic = event => ({
   type: types.ON_TOPIC,
   payload: event,
 });
@@ -195,29 +185,25 @@ export const changeStatus = (userid, postStatus, postid, role) => {
   if (postStatus === 'unclaimed') postStatus = 1;
   if (postStatus === 'claimed') postStatus = 2;
   if (postStatus === 'closed') postStatus = 3;
-   return (dispatch) => {
-    console.log('this is not going to work');
-    return fetch('http://localhost:3000/status', {
-      headers: {
-        'Content-Type': 'application/json',
-        //       "Access-Control-Allow-Origin": "*",
-        // "Access-Control-Allow-Methods ": "GET, POST, HEAD, PATCH, DELETE",
-        // "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept",
-      },
-      method: 'POST',
-      body: JSON.stringify({
-        user_id: userid,
-        status: postStatus,
-        post_id: postid,
-        role: role,
-      })
+  return dispatch => fetch('http://localhost:3000/status', {
+    headers: {
+      'Content-Type': 'application/json',
+      //       "Access-Control-Allow-Origin": "*",
+      // "Access-Control-Allow-Methods ": "GET, POST, HEAD, PATCH, DELETE",
+      // "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept",
+    },
+    method: 'POST',
+    body: JSON.stringify({
+      user_id: userid,
+      status: postStatus,
+      post_id: postid,
+      role,
+    }),
+  })
+    .then((res) => {
+      if (res.status === 200) fetchData(dispatch);
     })
-      .then((res) => {
-        console.log(res.status, 'res')
-        fetchData(dispatch);
-      })
-      .catch(err => console.log(err, 'errrr'));
-  }
+    .catch(err => console.log(err, 'errrr'));
 };
 
 
@@ -225,27 +211,31 @@ export const togglePage = () => ({
   type: types.TOGGLE_PAGE,
 });
 
-export const onCreateSectionSubmit = (user_id, problem, expect, tried, suspect, topic) => {
-  return function (dispatch) {
-    return fetch('http://localhost:3000/createpost', {
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      method: 'POST',
-      body: JSON.stringify({
-        // status: postStatus,
-        // postid: postid,
-        // all these 6 fields enough??
-        user_id: user_id,
-        problem: problem,
-        expect: expect,
-        tried: tried,
-        suspect: suspect,
-        topic: topic,
-        // createdby, resolvedby, problem, expect, tried, suspect, topic
-      })
+export const onCreateSectionSubmit = (user_id, problem, expect, tried, suspect, topic) => function createSectionSubmit(dispatch) {
+  return fetch('http://localhost:3000/createpost', {
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    method: 'POST',
+    body: JSON.stringify({
+      // status: postStatus,
+      // postid: postid,
+      user_id,
+      problem,
+      expect,
+      tried,
+      suspect,
+      topic,
+      // createdby, resolvedby, problem, expect, tried, suspect, topic
+    }),
+  })
+    .then((res) => {
+      if (res.status === 200) {
+        fetchData(dispatch);
+        dispatch({ type: types.ON_CREATESECTION_SUBMIT });
+      }
     })
-      .then(fetchData(dispatch))
-      .then(dispatch({ type: types.ON_CREATESECTION_SUBMIT }))
-  }
-}
+    // .then(fetchData(dispatch))
+    // .then(dispatch({ type: types.ON_CREATESECTION_SUBMIT }))
+    .catch(error => console.log(error, 'err in submit'));
+};

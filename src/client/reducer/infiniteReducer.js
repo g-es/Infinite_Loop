@@ -1,4 +1,5 @@
 import * as types from '../actions/actionTypes';
+
 const initialState = {
   username: '',
   role: '',
@@ -47,20 +48,19 @@ export default (state = initialState, action) => {
     }
     case types.ON_LOGIN_SUBMIT: {
       const newState = Object.assign({}, state);
-      //TODO:
+      // TODO:
     }
     case types.ON_SIGNUP_SUBMIT: {
       const newState = Object.assign({}, state);
-      //TODO:
+      // TODO:
     }
     case types.TOGGLE_PAGE: {
-      
       const newState = Object.assign({}, state);
-      if(newState.currentPage = 'login'){
-        newState.currentPage = 'signup'
+      if (newState.currentPage = 'login') {
+        newState.currentPage = 'signup';
       }
-      if(newState.currentPage = 'signup'){
-        newState.currentPage = 'login'
+      if (newState.currentPage = 'signup') {
+        newState.currentPage = 'login';
       }
       return newState;
     }
@@ -81,7 +81,6 @@ export default (state = initialState, action) => {
     }
     case types.ON_SUSPECT: {
       const newState = Object.assign({}, state);
-      console.log(action,'on suspect')
       newState.suspect = action.payload.target.value;
       return newState;
     }
@@ -92,18 +91,18 @@ export default (state = initialState, action) => {
     }
     case types.ON_TOPIC: {
       const newState = Object.assign({}, state);
-      console.log(action.payload.target.value,'in reducer')
       newState.topic = action.payload.currentTarget.value;
       return newState;
     }
     case types.CHANGE_STATUS: {
       const newState = Object.assign({}, state);
       // fetch request, send all the problem/suspect/tried/topic to database
-      
     }
     case types.ON_SIGNUP_SUCCESS: {
       const newState = Object.assign({}, state);
       newState.currentPage = 'home';
+      console.log(action.payload,'should be user id')
+      newState.user_id = action.payload;
       return newState;
     }
     case types.ON_SIGNUP_FAIL: {
@@ -129,7 +128,7 @@ export default (state = initialState, action) => {
     }
     case types.UPDATE_UNCLAIMED: {
       const newState = Object.assign({}, state);
-      newState.notStarted= action.payload;
+      newState.notStarted = action.payload;
       return newState;
     }
     case types.UPDATE_CLAIMED: {
@@ -137,9 +136,8 @@ export default (state = initialState, action) => {
       newState.inProgress = action.payload;
       return newState;
     }
-    case types.SAVE_LOGIN_INFO:{
+    case types.SAVE_LOGIN_INFO: {
       const newState = Object.assign({}, state);
-      // console.log(action.payload, 'payload')
       newState.firstname = action.payload.firstname;
       newState.lastname = action.payload.lastname;
       newState.user_id = action.payload.user_id;
@@ -150,5 +148,4 @@ export default (state = initialState, action) => {
     default:
       return state;
   }
-}
-
+};

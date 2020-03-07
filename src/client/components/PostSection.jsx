@@ -1,31 +1,28 @@
-import Post from './Post';
-import React, { Component } from 'react'
+import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import * as actions from '../actions/actions.js';
 import PieChart from 'react-minimal-pie-chart';
+import * as actions from '../actions/actions.js';
+import Post from './Post';
 
-const mapStateToProps = store => ({ 
+const mapStateToProps = store => ({
   notStarted: store.infiniteReducer.notStarted,
   inProgress: store.infiniteReducer.inProgress,
   closed: store.infiniteReducer.closed,
   userid: store.infiniteReducer.user_id,
-  role: store.infiniteReducer.role, 
-  rerender: store.infiniteReducer.rerender, 
+  role: store.infiniteReducer.role,
+  rerender: store.infiniteReducer.rerender,
 });
-const mapDispatchToProps = (dispatch) => {
-  return {
-    changeStatus: (userid, status, postid, role) => {
-      dispatch(actions.changeStatus(userid, status, postid, role))
-    },   
-  };
-};
+const mapDispatchToProps = dispatch => ({
+  changeStatus: (userid, status, postid, role) => {
+    dispatch(actions.changeStatus(userid, status, postid, role));
+  },
+});
 
 const PostSection = (props) => {
-
   // // array of posts by status
   // const { notStarted, inProgress, closed } = props;
   // // handlers
-  // const { changeStatus } = props; 
+  // const { changeStatus } = props;
   // // user info
   // const { name, role } = props;
 
@@ -36,8 +33,8 @@ const PostSection = (props) => {
       // height: '800px',
       // width: '100%',
       // borderTop: '6px solid rgb(85, 85, 85)',
-      'margin-top': '20px',
-     
+      marginTop: '20px',
+
       // 'margin-left': '20px',
 
       // backgroundColor: 'khaki'
@@ -49,8 +46,8 @@ const PostSection = (props) => {
       // height: '350px',
       // width: '100%',
       // borderTop: '3px solid rgb(85, 85, 85)',
-      'padding-top': '10px',
-      'padding-bottom': '10px',
+      paddingTop: '10px',
+      paddingBottom: '10px',
 
       // 'margin-bottom': '10px',
       backgroundColor: 'tomato',
@@ -61,8 +58,8 @@ const PostSection = (props) => {
       flexDirection: 'row',
       flexWrap: 'wrap',
       // 'margin-bottom': '10px',
-      'padding-top': '10px',
-      'padding-bottom': '10px',
+      paddingTop: '10px',
+      paddingBottom: '10px',
       // height: '350px',
       // width: '100%',
       // borderTop: '3px solid rgb(85, 85, 85)',
@@ -72,23 +69,22 @@ const PostSection = (props) => {
     postRowClosed: {
       height: 'auto',
       width: '100%',
-      'padding-top': '10px',
-      'padding-bottom': '40px',
+      paddingTop: '10px',
+      paddingBottom: '40px',
       // borderTop: '3px solid rgb(85, 85, 85)',
       backgroundColor: 'seagreen',
       // boxShadow: '3px 6px #888888'
     },
-   
-  }
 
-  //iterate through each notStarted post and create component
-  const notStartedComponents = props.notStarted.map((post, index) => {
-    console.log(post, props,'post')
-    return <Post
+  };
+
+  // iterate through each notStarted post and create component
+  const notStartedComponents = props.notStarted.map((post, index) => (
+    <Post
       key={index}
       // name={props.name}
       createdBy={post.student_name}
-      resolvedBy=''
+      resolvedBy=""
       userid={props.userid}
       role={props.role}
       problem={post.problem}
@@ -98,16 +94,16 @@ const PostSection = (props) => {
       topic={post.topic}
       status={post.status}
       changeStatus={props.changeStatus}
-      statusid = {post.statusid}
-      postid = {post.post_id}
-      />
-  });
-  //iterate through each notStarted post and create component
-  const inProgressComponents = props.inProgress.map((post, index) => {
-    return <Post
+      statusid={post.statusid}
+      postid={post.post_id}
+    />
+  ));
+  // iterate through each notStarted post and create component
+  const inProgressComponents = props.inProgress.map((post, index) => (
+    <Post
       key={index * 10000}
       // name={name}
-      //role={role}
+      // role={role}
       userid={props.userid}
       createdBy={post.student_name}
       resolvedBy={post.helper_name}
@@ -118,14 +114,14 @@ const PostSection = (props) => {
       topic={post.topic}
       status={post.status}
       changeStatus={props.changeStatus}
-      statusid = {post.statusid}
-      postid = {post.post_id}
-      role = {props.role}
-      />
-  });
-  //iterate through each notStarted post and create component
-  const closedComponents = props.closed.map((post, index) => {
-    return <Post
+      statusid={post.statusid}
+      postid={post.post_id}
+      role={props.role}
+    />
+  ));
+  // iterate through each notStarted post and create component
+  const closedComponents = props.closed.map((post, index) => (
+    <Post
       // key={index * 10000}
       // name={name}
       // role={role}
@@ -139,10 +135,10 @@ const PostSection = (props) => {
       topic={post.topic}
       status={post.status}
       changeStatus={props.changeStatus}
-      statusid = {post.statusid}
-      postid = {post.post_id}
-      />
-  });
+      statusid={post.statusid}
+      postid={post.post_id}
+    />
+  ));
 
   const length1 = notStartedComponents.length;
   const length2 = inProgressComponents.length;
@@ -150,44 +146,55 @@ const PostSection = (props) => {
   // ** (CSS) class postRowClosed should be shorter than postRow**
 
 
-
   return (
     <div>
-      <br></br>
-      <br></br>
+      <br />
+      <br />
 
-    <PieChart style={ style.pie }
-    data={[
-      { title: 'unclaimed', value: length1/(length1+length2+length3), color: 'tomato' },
-      { title: 'in progress', value: length2/(length1+length2+length3), color: 'sandybrown' },
-      { title: 'resolved', value: length3/(length1+length2+length3), color: 'seagreen' },
-    ]}
-    lineWidth={15}
-    animate
-    paddingAngle={4}
+
+      <PieChart
+        style={style.pie}
+        data={[
+          { title: 'unclaimed', value: length1 / (length1 + length2 + length3), color: 'tomato' },
+          { title: 'in progress', value: length2 / (length1 + length2 + length3), color: 'sandybrown' },
+          { title: 'resolved', value: length3 / (length1 + length2 + length3), color: 'seagreen' },
+        ]}
+        lineWidth={15}
+        animate
+        paddingAngle={4}
     // startAngle={270}
-    ratio={0.9}
-    
-    />
-      <div>unclaimed:{length1/(length1+length2+length3)*100}%</div>
-      <div>in progress:{length2/(length1+length2+length3)*100}%</div>
-      <div>resolved:{length3/(length1+length2+length3)*100}%</div>
+        ratio={0.9}
+      />
+      <div>
+unclaimed:
+        {length1 / (length1 + length2 + length3) * 100}
+%
+      </div>
+      <div>
+in progress:
+        {length2 / (length1 + length2 + length3) * 100}
+%
+      </div>
+      <div>
+resolved:
+        {length3 / (length1 + length2 + length3) * 100}
+%
+      </div>
 
-      <div style={ style.postContainer }>
-        <div style={ style.postRow }>
+      <div style={style.postContainer}>
+        <div style={style.postRow}>
           { notStartedComponents }
         </div>
-        <div style={ style.postRow2 }>
+        <div style={style.postRow2}>
           { inProgressComponents }
         </div>
-        <div style={ style.postRowClosed }> 
+        <div style={style.postRowClosed}>
           { closedComponents }
         </div>
-        
+
       </div>
     </div>
-  )
-  
-}
+  );
+};
 
 export default connect(mapStateToProps, mapDispatchToProps)(PostSection);

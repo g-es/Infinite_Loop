@@ -1,23 +1,21 @@
-//server exported in order to close database after tests are done
+// server exported in order to close database after tests are done
 const db = require('../postgresql.js');
 
 module.exports = {
 
   /**
    * gets all posts from SQL database, returns array of posts to client
-   * @param {Object} req request object 
+   * @param {Object} req request object
    * @param {Object} res response object
    * @param {function} next sends req and res to next middleware
    */
   getPosts(req, res, next) {
     db.any('SELECT p.post_id, p.student_id, p.helper_id, s.firstname AS student_name, h.firstname AS helper_name, p.problem, p.expect, p.suspect, p.tried, p.status, sta.status, p.topic FROM ((posts AS p INNER JOIN users AS s ON p.student_id = s.user_id) LEFT JOIN users as h ON p.helper_id = h.user_id) LEFT JOIN status as sta ON p.status = sta.status_id')
-      .then(data => {
+      .then((data) => {
         res.locals.data = data;
         return next();
       })
-      .catch(err => {
-        return next(err);
-      });
+      .catch(err => next(err));
   },
   /**
    * creates post in database, sending relevant info to be saved
@@ -27,16 +25,16 @@ module.exports = {
    */
   createPost(req, res, next) {
     if (Object.keys(req.body).length === 6) {
-      db.one("INSERT INTO posts(student_id, problem, expect, tried, suspect, topic) VALUES($1, $2, $3, $4, $5, $6) RETURNING *", [req.body.user_id, req.body.problem, req.body.expect, req.body.tried, req.body.suspect, req.body.topic])
-        .then(data => {
-          console.log('data');
+      db.one('INSERT INTO posts(student_id, problem, expect, tried, suspect, topic) VALUES($1, $2, $3, $4, $5, $6) RETURNING *', [req.body.user_id, req.body.problem, req.body.expect, req.body.tried, req.body.suspect, req.body.topic])
+        .then((data) => {
+          console.log('data createPost!', data);
           res.locals.data = data;
           next();
         })
-        .catch(err => {
+        .catch((err) => {
           console.log(err);
           next(err);
-        })
+        });
     } else {
       res.send('Invalid post');
     }
@@ -49,25 +47,24 @@ module.exports = {
    * @param {function} next sends req and res to next middleware
    */
   changeStatus(req, res, next) {
-    console.log('made it inside changeStatus');
-    console.log(req.body);
-    console.log(Object.keys(req.body).length)
-    console.log(req.body.status, req.body.user_id, req.body.post_id, req.body.role)
+    console.log('made it inside changeStatus', req.body);
     if (Object.keys(req.body).length === 4) {
-      if (req.body.role === 2) {
-        db.one("UPDATE posts SET status=$1, helper_id=$2 WHERE post_id=$3 RETURNING *", [req.body.status + 1, req.body.user_id, req.body.post_id])
-          .then(data => {
+      if (req.body.role === /*2*/'helper') {
+        db.one('UPDATE posts SET status=$1, helper_id=$2 WHERE post_id=$3 RETURNING *', [req.body.status + 1, req.body.user_id, req.body.post_id])
+          .then((data) => {
             res.locals.data = data;
-            console.log('reach data', data)
+            console.log('reach data', data);
             next();
           })
-          .catch(err => {
+          .catch((err) => {
             // console.log(err,'reach here')
             next(err);
-          })
+          });
       } else {
-        res.status(400).send('Invalid status change');
+        res.status(400).send('student cannot change status');
       }
+    } else {
+      res.status(400).send('missing parameters?');
     }
-  }
-}
+  },
+};
